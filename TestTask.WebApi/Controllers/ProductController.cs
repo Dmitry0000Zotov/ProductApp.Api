@@ -41,16 +41,24 @@ namespace TestTask.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct([FromForm] CreateProductCommand createProductCommand)
         {
-            var product = await Mediator.Send(createProductCommand);
-            return Ok(product);
+            if(!string.IsNullOrEmpty(createProductCommand.Name) && !string.Equals(createProductCommand.Name, "null"))
+            {
+                var product = await Mediator.Send(createProductCommand);
+                return Ok(product);
+            }
+            return BadRequest();
+            
         }
 
         [HttpPut]
         public async Task<ActionResult<Product>> UpdateProduct([FromBody] UpdateProductCommand updateProductCommand)
         {
-            await Console.Out.WriteLineAsync($"{updateProductCommand.Id}");
-            var product = await Mediator.Send(updateProductCommand);
-            return Ok(product);
+            if (!string.IsNullOrEmpty(updateProductCommand.Name) && !string.Equals(updateProductCommand.Name, "null"))
+            {
+                var product = await Mediator.Send(updateProductCommand);
+                return Ok(product);
+            }
+            return BadRequest();
         }
 
         [HttpDelete]
